@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Școala Rutieră RBM - Examen Simulat</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-900:#013b6b;
+    --blue-700:#0b63a6;
+    --blue-500:#2a86d6;
+    --bg:#f3f8ff;
+    --card:#ffffff;
+    --accent:#ff4d4d;
+    --success:#28a745;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Arial,sans-serif;
+    background:linear-gradient(180deg,var(--bg),#e8f2ff);
+    color:#0b2540;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* header/nav */
+  header{
+    background:linear-gradient(90deg,var(--blue-900),var(--blue-700));
+    color:white;
+    padding:18px 24px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .logo{
+    width:48px;height:48px;border-radius:8px;
+    background:linear-gradient(135deg,#fff6,#fff2);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:white;
+    border:2px solid rgba(255,255,255,0.08);
+  }
+  header h1{font-size:1.15rem;margin:0;font-weight:700}
+  nav{display:flex;gap:8px;align-items:center}
+  .nav-btn{
+    background:transparent;border:1px solid rgba(255,255,255,0.12);
+    color:white;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;
+  }
+  .nav-btn:hover{background:rgba(255,255,255,0.06)}
+
+  /* container */
+  .wrap{max-width:1200px;margin:28px auto;padding:0 18px}
+  .card{
+    background:var(--card);border-radius:12px;padding:26px;box-shadow:0 12px 30px rgba(12,40,80,0.08);
+  }
+
+  /* welcome */
+  .welcome h2{color:var(--blue-900);margin-top:0}
+  .muted{color:var(--muted)}
+
+  /* layout sections */
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+  /* quiz area */
+  #quizWrap{min-height:360px}
+  .quiz-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .timer{font-weight:700;color:var(--accent)}
+  .progress{font-weight:600;color:var(--muted)}
+  .question{font-size:1.05rem;margin:10px 0 18px;color:#072038}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt-btn{
+    text-align:left;padding:14px;border-radius:10px;border:none;cursor:pointer;font-weight:600;
+    background:linear-gradient(180deg,var(--blue-500),var(--blue-700));color:white;box-shadow:0 6px 18px rgba(42,134,214,0.12);
+    transition:transform .12s ease,opacity .12s;outline: none;
+  }
+  .opt-btn:hover{transform:translateY(-3px)}
+  .opt-btn.correct{background:var(--success);box-shadow:none;color:white}
+  .opt-btn.wrong{background:var(--accent);box-shadow:none;color:white}
+  .opt-btn.disabled{opacity:0.7;cursor:default;transform:none}
+
+  .controls{display:flex;gap:12px;margin-top:16px}
+  .primary{background:linear-gradient(90deg,var(--blue-700),var(--blue-500));color:white;border:none;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+  .ghost{background:transparent;border:1px solid #dbeeff;padding:12px 16px;border-radius:10px;cursor:pointer;color:var(--blue-700);font-weight:700}
+  .result{padding:18px;border-radius:10px;margin-top:14px;font-weight:700}
+
+  /* right column */
+  .sidebar h3{margin-top:0;color:var(--blue-900)}
+  .signs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:980px){ .signs{grid-template-columns:repeat(5,1fr)} }
+  .sign-card{background:#f7fbff;border-radius:8px;padding:8px;text-align:center;border:1px solid #e6f3ff}
+  .sign-card img{width:64px;height:64px;object-fit:contain}
+
+  /* rules list */
+  .rules-list{columns:2;column-gap:28px}
+  @media (max-width:980px){ .rules-list{columns:1} }
+
+  footer{margin:26px auto;text-align:center;color:var(--muted);font-size:0.9rem}
+
+  /* small badge */
+  .badge{display:inline-block;background:#eef6ff;border:1px solid #d6eaff;padding:6px 10px;border-radius:999px;font-weight:700;color:var(--blue-900)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">RBM</div>
+    <div>
+      <h1>Școala Rutieră RBM</h1>
+      <div class="muted" style="font-size:0.85rem">Platformă educațională — întrebări similare DRPCIV</div>
+    </div>
+  </div>
+
+  <nav>
+    <button class="nav-btn" data-section="welcome">Acasă</button>
+    <button class="nav-btn" data-section="chestionar">Chestionar Auto (20)</button>
+    <button class="nav-btn" data-section="semne">Învățare Semne (30)</button>
+    <button class="nav-btn" data-section="reguli">Reguli (50)</button>
+  </nav>
+</header>
+
+<div class="wrap">
+  <!-- PAGE CONTENT -->
+  <div class="grid">
+    <div>
+      <div class="card welcome section" id="welcome">
+        <h2>Bine ați venit pe Școala Rutieră RBM</h2>
+        <p class="muted">Acest site este creat în scop educațional. Întrebările și materialele sunt **similare** cu testele oficiale DRPCIV și sunt oferite pentru antrenament. Folosește meniul din dreapta sau butoanele de sus pentru a naviga.</p>
+
+        <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="primary" data-section="chestionar">Start Chestionar (20)</button>
+          <button class="ghost" data-section="semne">Învață semnele</button>
+          <button class="ghost" data-section="reguli">Vezi regulile</button>
+        </div>
+      </div>
+
+      <div class="card section" id="chestionar" style="display:none">
+        <div id="quizWrap">
+          <div class="quiz-head">
+            <div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <span class="badge">Simulare oficială</span>
+                <div style="margin-left:6px;font-weight:700;color:var(--muted)">(20 întrebări)</div>
+              </div>
+            </div>
+            <div>
+              <div class="timer" id="timer">Timp rămas: 20:00</div>
+              <div class="progress" id="progress">Întrebare 1 din 20</div>
+            </div>
+          </div>
+
+          <div id="questionBox">
+            <!-- generat din JS -->
+          </div>
+
+          <div class="controls">
+            <button id="nextBtn" class="primary" style="display:none">Următoarea</button>
+            <button id="submitBtn" class="primary" style="display:none;background:linear-gradient(90deg,#0b63a6,#2a86d6)">Trimite examen</button>
+            <button id="quitBtn" class="ghost">Renunță</button>
+          </div>
+
+          <div id="resultBox" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="card section" id="semne" style="display:none">
+        <h3>Semne rutiere importante (30) — învață aici</h3>
+        <p class="muted">Click pe un semn pentru a vedea explicația amplă.</p>
+        <div style="margin-top:12px" id="signsGrid" class="signs"></div>
+
+        <div id="signDetail" style="margin-top:14px"></div>
+      </div>
+
+      <div class="card section" id="reguli" style="display:none">
+        <h3>Reguli de circulație esențiale (50)</h3>
+        <p class="muted">Liste cu reguli pe care le vei întâlni frecvent în chestionare.</p>
+        <div style="margin-top:12px" class="rules-list" id="rulesList"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <aside class="sidebar">
+      <div class="card">
+        <h3>Resurse rapide</h3>
+        <p class="muted">Folosește secțiunile pentru antrenament:</p>
+        <ul>
+          <li><strong>Chestionar:</strong> 20 întrebări, respins la 4 greșeli</li>
+          <li><strong>Semne:</strong> 30 semne explicate</li>
+          <li><strong>Reguli:</strong> 50 reguli pentru examen</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Exemple semne</h3>
+        <div id="miniSigns" class="signs"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Info</h3>
+        <p class="muted" style="font-size:0.95rem">Site creat pentru antrenament. Rezultatele nu sunt oficiale. For educational purposes only.</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer>By Gruia Work's, professional Programmer</footer>
+</div>
+
+<script>
+/* ============================
+   Data: 20 întrebări, 30 semne, 50 reguli
+   ============================ */
+
+const QUESTIONS = [
+  { q: "Care este limita maximă de viteză în localitate (în mod normal)?", opts:["50 km/h","30 km/h","60 km/h","70 km/h"], a:"50 km/h" },
+  { q: "Ce semn indică \"Oprire obligatorie\"?", opts:["Stop","Cedează trecerea","Acces interzis","Prioritate"], a:"Stop" },
+  { q: "Ce înseamnă linia continuă pe mijlocul drumului?", opts:["Depășirea interzisă","Depășirea permisă","Oprirea obligatorie","Marcaj pentru biciclete"], a:"Depășirea interzisă" },
+  { q: "La o intersecție nedirijată, prioritate are vehiculul venind din:", opts:["Dreapta","Stânga","Față","Orice direcție"], a:"Dreapta" },
+  { q: "Ce semnalizezi înainte de a vira la dreapta?", opts:["Semnal luminos dreapta","Semnal stânga","Avariile","Nu semnalizezi"], a:"Semnal luminos dreapta" },
+  { q: "Ce facem când vedem un vehicul de urgență cu semnale luminoase și sonore?", opts:["Degajăm carosabilul și acordăm prioritate","Continuăm normal","Oprim doar dacă suntem în intersecție","Facem semn cu mâna"], a:"Degajăm carosabilul și acordăm prioritate" },
+  { q: "Ce semn avertizează asupra unei treceri pentru pietoni?", opts:["Triunghi cu pieton","Cerc cu pieton","Dreptunghi albastru","Stop"], a:"Triunghi cu pieton" },
+  { q: "Pe drumuri naționale în afara localităților, limita uzuală este:", opts:["90 km/h","80 km/h","100 km/h","120 km/h"], a:"90 km/h" },
+  { q: "Când trebuie folosite luminile de întâlnire (faza scurtă)?", opts:["Noaptea sau vizibilitate redusă","Numai pe autostradă","Doar în oraș","Când plouă puternic doar"], a:"Noaptea sau vizibilitate redusă" },
+  { q: "Ce înseamnă marcajul longitudinal întrerupt?", opts:["Depășire permisă","Depășire interzisă","Oprire obligatorie","Parcare"], a:"Depășire permisă" },
+  { q: "Centura de siguranță este obligatorie pentru:", opts:["Toți pasagerii","Doar șoferul","Doar pasagerii din față","Doar copiii"], a:"Toți pasagerii" },
+  { q: "Ce faci când întâlnești un semafor cu galben intermitent?", opts:["Circuli cu prudență","Te oprești mereu","Aștepți verde","Depășești"], a:"Circuli cu prudență" },
+  { q: "Pe autostradă, ce distanță minimă e recomandată între vehicule la viteze mari?", opts:["Mai mare decât în oraș","Mai mică decât în oraș","Foarte mică","Nu contează"], a:"Mai mare decât în oraș" },
+  { q: "Ce semn indică \"Acces interzis\"?", opts:["Cerc roșu cu fond alb","Triunghi roșu","Dreptunghi albastru","Stop"], a:"Cerc roșu cu fond alb" },
+  { q: "Ce trebuie să faci la întâlnirea cu un autobuz oprit pentru îmbarcare/debarcare în localitate?", opts:["Oprești și acorzi prioritate pietonilor","Depășești repede","Claxonezi","Nu faci nimic"], a:"Oprești și acorzi prioritate pietonilor" },
+  { q: "Depășirea este interzisă pe:", opts:["Linie continuă","Linie întreruptă","Pe autostradă","În intersecții cu semafor verde"], a:"Linie continuă" },
+  { q: "Care este comportamentul corect la trecerea la nivel cu calea ferată cu bariere închisă?", opts:["Oprești și aștepți redeschiderea","Treci dacă nu se vede trenul","Ocolești barierele","Claxonezi"], a:"Oprești și aștepți redeschiderea" },
+  { q: "În ce situație poți folosi avariile (lumini de avarie)?", opts:["Când ești oprit din motive tehnice pe partea carosabilă","Când ești în depășire","Pentru a avertiza pietonii","La pornirea mașinii"], a:"Când ești oprit din motive tehnice pe partea carosabilă" },
+  { q: "Semnalul sonor (claxon) este permis în localitate:", opts:["Doar pentru evitarea unui pericol imediat","Oricând","Pentru salut","Pentru a grăbi traficul"], a:"Doar pentru evitarea unui pericol imediat" },
+  { q: "Care este reacția la semnalul agentului de circulație care te oprește?", opts:["Oprești și execuți indicațiile","Continui","Alegi direcția","Aștepți"] }
+];
+
+const SIGNS = [
+  {id:1,name:"Stop",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Romania_stop_sign.svg/800px-Romania_stop_sign.svg.png",desc:"Oprire obligatorie. Trebuie să oprești total."},
+  {id:2,name:"Cedează trecerea (yield)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Romania_yield_sign.svg/800px-Romania_yield_sign.svg.png",desc:"Reduci viteza și acorzi prioritate."},
+  {id:3,name:"Acces interzis",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/ROU_R6.svg/800px-ROU_R6.svg.png",desc:"Interzis accesul vehiculelor."},
+  {id:4,name:"Limită viteză 50",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Romania_R37a_50.svg/800px-Romania_R37a_50.svg.png",desc:"Viteza maximă admisă: 50 km/h."},
+  {id:5,name:"Interzis depășirea",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/ROU_R33.svg/800px-ROU_R33.svg.png",desc:"Depășirea este interzisă."},
+  {id:6,name:"Drum cu prioritate",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/ROU_R2.svg/800px-ROU_R2.svg.png",desc:"Indică drum cu prioritate."},
+  {id:7,name:"Trecere de pietoni",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/ROU_I_2.svg/800px-ROU_I_2.svg.png",desc:"Atenție trecere pietoni, reduce viteza."},
+  {id:8,name:"Zonă școală",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/ROU_R35.svg/800px-ROU_R35.svg.png",desc:"Reduce viteza, pot fi copii în zonă."},
+  {id:9,name:"Interzis acces biciclete",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/ROU_R15.svg/800px-ROU_R15.svg.png",desc:"Bicicletele sunt interzise."},
+  {id:10,name:"Semafor",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/ROU_I_6.svg/800px-ROU_I_6.svg.png",desc:"Respectă semnificația luminilor semaforului."},
+  {id:11,name:"Prioritate față de sens opus",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/ROU_R17.svg/800px-ROU_R17.svg.png",desc:"Ai prioritate față de vehiculele din sens opus."},
+  {id:12,name:"Obligatoriu înainte dreapta",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/ROU_I_29.svg/800px-ROU_I_29.svg.png",desc:"Direcție obligatorie: înainte/dreapta (după pictogramă)."},
+  {id:13,name:"Obligatoriu înainte",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/ROU_I_28.svg/800px-ROU_I_28.svg.png",desc:"Direcție obligatorie: înainte."},
+  {id:14,name:"Parcare interzisă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ROU_R7.svg/800px-ROU_R7.svg.png",desc:"Parcarea interzisă."},
+  {id:15,name:"Oprire interzisă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/ROU_R8.svg/800px-ROU_R8.svg.png",desc:"Staționarea și oprirea sunt interzise."},
+  {id:16,name:"Pericol general",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/ROU_R1.svg/800px-ROU_R1.svg.png",desc:"Atenție, pericol! Redu viteza."},
+  {id:17,name:"Supralargire/denivelare",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/ROU_R2a.svg/800px-ROU_R2a.svg.png",desc:"Pericol: denivelări sau drum denivelat."},
+  {id:18,name:"Sens giratoriu",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/ROU_R3.svg/800px-ROU_R3.svg.png",desc:"Intri într-un sens giratoriu."},
+  {id:19,name:"Drum ingustare",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/ROU_R5.svg/800px-ROU_R5.svg.png",desc:"Atenție la ingustarea drumului."},
+  {id:20,name:"Șantier",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/ROU_R4.svg/800px-ROU_R4.svg.png",desc:"Lucrări pe drum; condu cu grijă."},
+  {id:21,name:"Fără semnalizare",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/ROU_I_30.svg/800px-ROU_I_30.svg.png",desc:"Indicator informativ, vezi pictograma."},
+  {id:22,name:"Acces interzis pentru vehicule cu remorcă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/ROU_R9.svg/800px-ROU_R9.svg.png",desc:"Acces interzis vehiculelor cu remorcă."},
+  {id:23,name:"Limită viteză 30",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Romania_R37a_30.svg/800px-Romania_R37a_30.svg.png",desc:"Viteza maximă admisă: 30 km/h."},
+  {id:24,name:"Limită viteză 70",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Romania_R37a_70.svg/800px-Romania_R37a_70.svg.png",desc:"Viteza maximă admisă: 70 km/h."},
+  {id:25,name:"Prioritate tren",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/ROU_R12.svg/800px-ROU_R12.svg.png",desc:"Traversare cale ferată; acordă atenție."},
+  {id:26,name:"Fără acces vehicule mari",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ROU_R11.svg/800px-ROU_R11.svg.png",desc:"Acces interzis vehiculelor grele."},
+  {id:27,name:"Marcaj linie continuă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Marking_solid_line.svg/320px-Marking_solid_line.svg.png",desc:"Linie continuă — depășire interzisă."},
+  {id:28,name:"Marcaj linie întreruptă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Marking_dash.svg/320px-Marking_dash.svg.png",desc:"Linie întreruptă — depășire permisă."},
+  {id:29,name:"Limită viteză 100",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Romania_R37a_100.svg/800px-Romania_R37a_100.svg.png",desc:"Viteza maximă admisă: 100 km/h."},
+  {id:30,name:"Parcare permisă",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/ROU_I_7.svg/800px-ROU_I_7.svg.png",desc:"Loc de parcare permis."}
+];
+
+const RULES = [
+  "Respectați prioritatea reglementată prin semne și marcaje.",
+  "La intersecțiile nedirijate, acordați prioritate vehiculelor din dreapta.",
+  "Nu depăşiţi peste linie continuă.",
+  "Păstraţi o distanţă de siguranţă faţă de vehiculul din faţă.",
+  "Purtați centura de siguranță în timpul mersului.",
+  "Nu conduceți sub influența alcoolului sau a drogurilor.",
+  "Folosiți semnalizarea înainte de schimbarea direcției.",
+  "Reduceți viteza la trecerile pentru pietoni.",
+  "Opriți la semnalizarea agentului de circulație când vi se cere.",
+  "Respectați semnificația semafoarelor.",
+  "Nu blocați intersecțiile.",
+  "Adaptați viteza la condițiile de drum și meteo.",
+  "Pe autostradă, folosiți banda din dreapta pentru mers normal.",
+  "La depășire, asigurați-vă că e sigur și semnalizați.",
+  "Nu folosiți telefonul mobil fără dispozitiv hands-free în mers.",
+  "La întâlnirea unui vehicul de urgență, degajați calea.",
+  "Nu opriți pe banda de urgență decât în caz de avarie.",
+  "Nu efectuați mersul înapoi pe autostradă.",
+  "Nu executați viraje periculoase sau bruste.",
+  "Reduceți viteza în zonele cu școală și copii.",
+  "Respectați limitele de viteză afișate prin indicator.",
+  "Nu garati pe trotuare sau pe piste pentru biciclete.",
+  "Permiteți pietonilor să traverseze în siguranță.",
+  "Păstrați instalarea și verificarea periodică a autovehiculului.",
+  "Folosirea luminilor corespunzătoare: întâlnire, drum, ceață.",
+  "Nu conduceți obosit sau somnolent — opriți pentru odihnă.",
+  "La întâlniri pe drum îngust, acordați prioritate dacă este necesar.",
+  "Respectați semnificația marcajelor rutiere pe carosabil.",
+  "Folosirea anvelopelor adecvate sezonului (iarna-vară).",
+  "La trecerile de nivel cu calea ferată respectați semnalizarea.",
+  "Evitați transportul obiectelor care pot cădea de pe vehicul.",
+  "Acordați prioritate transportului în trafic de urgență.",
+  "Nu circulați pe banda destinată transportului public dacă este interzis.",
+  "La schimbarea benzii, asigurați-vă că nu puneți alți participanți în pericol.",
+  "Verificați unghiurile moarte înainte de manevre.",
+  "Nu depășiți în mod repetat limitele de viteză într-o zonă de control.",
+  "Semnalizați din timp schimbarea sensului de mers.",
+  "Nu faceți opriri bruște fără motiv pe benzile de circulație.",
+  "Respectați indicațiile panourilor cu restricții temporare (șantier).",
+  "La producerea unui accident, semnalizați și asigurați zona.",
+  "Nu folosiți farurile de întâlnire cu fază lungă în trafic de noapte când întâlniți alți participanți.",
+  "Păstrați documentele și asigurarea la zi.",
+  "Conduceți preventiv în zone cu animale sau vizibilitate redusă.",
+  "Nu efectuați depășiri când vizibilitatea e redusă (curbe, creste).",
+  "Respectați regulile privind transportul copiilor (scaune specializate).",
+  "Fii calm și preventiv — agresivitatea în trafic este periculoasă.",
+  "Verificați periodic sistemele de frânare și direcție.",
+  "Respectați semnificația marcajelor de tip zebra (treceri pietoni)."
+];
+
+/* ================
+   UI & Logic
+   ================ */
+
+let state = {
+  qIndex: 0,
+  correct: 0,
+  wrong: 0,
+  answered: 0,
+  timerSeconds: 20 * 60, // 20 minute
+  timerId: null,
+  finished: false
+};
+
+const el = {
+  sections: document.querySelectorAll('.section'),
+  navBtns: document.querySelectorAll('.nav-btn'),
+  questionBox: document.getElementById('questionBox'),
+  timer: document.getElementById('timer'),
+  progress: document.getElementById('progress'),
+  nextBtn: document.getElementById('nextBtn'),
+  submitBtn: document.getElementById('submitBtn'),
+  quitBtn: document.getElementById('quitBtn'),
+  resultBox: document.getElementById('resultBox'),
+  signsGrid: document.getElementById('signsGrid'),
+  signDetail: document.getElementById('signDetail'),
+  rulesList: document.getElementById('rulesList'),
+  miniSigns: document.getElementById('miniSigns')
+};
+
+/* navigation handlers */
+function hideAllSections(){ el.sections.forEach(s=>s.style.display='none'); }
+function showSection(id){
+  hideAllSections();
+  const sec = document.getElementById(id);
+  if(!sec) return;
+  sec.style.display='block';
+  // reset quiz UI only when opening chestionar (start fresh)
+  if(id==='chestionar'){ resetQuiz(); renderQuestion(); }
+}
+document.querySelectorAll('[data-section]').forEach(b=>{
+  b.addEventListener('click', ()=> showSection(b.dataset.section) );
+});
+
+/* render signs */
+function renderSigns(){
+  el.signsGrid.innerHTML = '';
+  el.miniSigns.innerHTML = '';
+  SIGNS.forEach(s=>{
+    const div = document.createElement('div');
+    div.className = 'sign-card';
+    div.innerHTML = `<img src="${s.img}" alt="${s.name}"><div style="font-weight:700;margin-top:8px">${s.name}</div>`;
+    div.addEventListener('click', ()=> showSignDetail(s));
+    el.signsGrid.appendChild(div);
+
+    // mini
+    const mini = div.cloneNode(true);
+    el.miniSigns.appendChild(mini);
+  });
+}
+function showSignDetail(s){
+  el.signDetail.innerHTML = `<div style="padding:14px;border-radius:8px;border:1px solid #e8f6ff;background:#f7fbff">
+    <div style="display:flex;gap:12px;align-items:center">
+      <img src="${s.img}" style="width:76px;height:76px;object-fit:contain;border-radius:6px">
+      <div>
+        <div style="font-weight:800;color:var(--blue-900);font-size:1.05rem">${s.name}</div>
+        <div class="muted" style="margin-top:6px">${s.desc}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* render rules */
+function renderRules(){
+  el.rulesList.innerHTML = '';
+  RULES.forEach(r=>{
+    const p = document.createElement('p');
+    p.style.margin='6px 0';
+    p.textContent = "• " + r;
+    el.rulesList.appendChild(p);
+  });
+}
+
+/* QUIZ render & logic */
+function resetQuiz(){
+  state.qIndex = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.answered = 0;
+  state.finished = false;
+  state.timerSeconds = 20 * 60;
+  if(state.timerId) { clearInterval(state.timerId); state.timerId = null; }
+  el.resultBox.style.display='none';
+  el.nextBtn.style.display='none';
+  el.submitBtn.style.display='none';
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay(){
+  const m = Math.floor(state.timerSeconds/60);
+  const s = state.timerSeconds % 60;
+  el.timer.textContent = `Timp rămas: ${m}:${s<10?'0':''}${s}`;
+}
+
+function startTimerIfNeeded(){
+  if(state.timerId) return;
+  state.timerId = setInterval(()=>{
+    state.timerSeconds--;
+    updateTimerDisplay();
+    if(state.timerSeconds <= 0){
+      clearInterval(state.timerId);
+      finishQuiz("Timp expirat");
+    }
+  },1000);
+}
+
+function renderQuestion(){
+  if(state.finished) return;
+  if(state.qIndex >= QUESTIONS.length){
+    finishQuiz();
+    return;
+  }
+
+  startTimerIfNeeded();
+  el.progress.textContent = `Întrebare ${state.qIndex+1} din ${QUESTIONS.length}`;
+
+  const Q = QUESTIONS[state.qIndex];
+  const optsHtml = Q.opts.map((o, idx) => {
+    return `<button class="opt-btn" data-opt="${escapeHtml(o)}">${escapeHtml(o)}</button>`;
+  }).join('');
+  el.questionBox.innerHTML = `
+    <div class="question">${escapeHtml(Q.q)}</div>
+    <div class="options">${optsHtml}</div>
+  `;
+
+  // attach option handlers
+  el.questionBox.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.addEventListener('click', () => onChoose(btn));
+  });
+
+  // hide controls (they will appear after answer)
+  el.nextBtn.style.display='none';
+  el.submitBtn.style.display='none';
+  el.resultBox.style.display='none';
+}
+
+function onChoose(btn){
+  if(state.finished) return;
+  // disable all options to prevent multiple clicks
+  const optionBtns = el.questionBox.querySelectorAll('.opt-btn');
+  optionBtns.forEach(b=>b.classList.add('disabled'), b=>b.disabled=true);
+
+  const selected = btn.getAttribute('data-opt');
+  const correct = QUESTIONS[state.qIndex].a;
+
+  // mark correct and wrong visually
+  optionBtns.forEach(b=>{
+    const val = b.getAttribute('data-opt');
+    if(val === correct) b.classList.add('correct');
+  });
+
+  if(selected === correct){
+    // correct
+    state.correct++;
+  } else {
+    // wrong
+    btn.classList.add('wrong');
+    state.wrong++;
+  }
+  state.answered++;
+
+  // If wrongs reached 4 -> immediate RESPINS
+  if(state.wrong >= 4){
+    finishQuiz("RESPINS (4 greșeli)");
+    return;
+  }
+
+  // show next/submit
+  if(state.qIndex < QUESTIONS.length - 1){
+    el.nextBtn.style.display='inline-block';
+  } else {
+    el.submitBtn.style.display='inline-block';
+  }
+}
+
+/* next/submit handlers */
+el.nextBtn.addEventListener('click', ()=> {
+  state.qIndex++;
+  renderQuestion();
+});
+el.submitBtn.addEventListener('click', ()=> finishQuiz() );
+el.quitBtn.addEventListener('click', ()=> {
+  if(confirm("Ești sigur că vrei să renunți la test? Progresul se va pierde.")){
+    if(state.timerId) clearInterval(state.timerId);
+    showSection('welcome');
+  }
+});
+
+/* finish logic */
+function finishQuiz(reason){
+  state.finished = true;
+  if(state.timerId) { clearInterval(state.timerId); state.timerId = null; }
+  // calculate final corrects (in case last question answered)
+  const totalCorrect = state.correct;
+  const totalWrong = state.wrong;
+  const total = QUESTIONS.length;
+
+  // decide result
+  let resultText = "RESPINS";
+  if(totalWrong >= 4) resultText = "RESPINS";
+  else if(totalCorrect >= 17) resultText = "ADMIS";
+  else resultText = "RESPINS";
+
+  // show message
+  el.questionBox.innerHTML = `
+    <div style="padding:14px;border-radius:10px;background:#f7fbff;border:1px solid #e6f3ff">
+      <div style="font-size:1.05rem;font-weight:800;color:var(--blue-900);margin-bottom:8px">Examen terminat</div>
+      <div style="margin-bottom:6px">Scor: <strong>${totalCorrect}/${total}</strong> (Greșeli: ${totalWrong})</div>
+      <div style="font-size:1.15rem;font-weight:900;color:${resultText==='ADMIS'?'var(--success)':'var(--accent)'}">${resultText}</div>
+      <div style="margin-top:10px;color:var(--muted);font-weight:600">${reason ? reason : ''}</div>
+      <div style="margin-top:12px">
+        <button class="primary" id="tryAgain">Refă testul</button>
+        <button class="ghost" id="backHome">Înapoi la Acasă</button>
+      </div>
+    </div>
+  `;
+  el.nextBtn.style.display='none';
+  el.submitBtn.style.display='none';
+  el.resultBox.style.display='none';
+
+  // attach handlers
+  document.getElementById('tryAgain').addEventListener('click', ()=> {
+    resetQuiz(); renderQuestion();
+  });
+  document.getElementById('backHome').addEventListener('click', ()=> {
+    showSection('welcome');
+  });
+}
+
+/* helpers */
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* initial render */
+renderSigns();
+renderRules();
+showSection('welcome');
+
+/* populate welcome quick-start buttons */
+document.querySelectorAll('.primary[data-section], .ghost[data-section]').forEach(b=>{
+  if(b.dataset && b.dataset.section){
+    b.addEventListener('click', ()=> showSection(b.dataset.section) );
+  }
+});
+</script>
+</body>
+</html>
